@@ -1,0 +1,22 @@
+# Create a reference database
+#makeblastdb -in Ath.pep -dbtype prot -title Ath -parse_seqids -out Ath
+# Align protein query sequences against the reference database
+
+  ###### follow these steps 
+makeblastdb -in H.m_proteome-DupGeneFinder.fasta -dbtype prot -title Hm -parse_seqids -out Hm
+
+blastp -query H.m_proteome-DupGeneFinder.fasta -db Hm -evalue 1e-10 -max_target_seqs 5 -outfmt 6 -out Hm.blast
+
+blastp -query M.b_proteome-DupGeneFinder.fasta -db Hm -evalue 1e-10 -max_target_seqs 5 -outfmt 6 -out Hm_Mb.blast
+
+##### then run the software
+
+  #move everything into a new directory called Dup
+#in there you need Hm.blast Hm_Mb.blast Hm.gff Hm_Mb.gff
+
+DupGen_finder.pl -i /nobackup/qkdf72/helixer/Annotation/fasta_proteome_files/dup/Mb_dup -t Mb -c hm -o results
+
+## -t is the target and -c is the outgroup ###### this ultimately compares against itself and uses the outgroup 
+#An outgroup helps us figure out different kinds of gene copies. It tells us which gene copies are unique to one group and which ones are shared by many groups. 
+#By comparing the target genes with those in the outgroup, the software can more accurately sort these gene copies into types like whole-genome duplications (WGDs), 
+#tandem duplications (TDs), proximal duplications (PDs), transposed duplications (TRDs), and dispersed duplications (DSDs).
