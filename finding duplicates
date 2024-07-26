@@ -45,7 +45,7 @@ grep -v -f cleaned_Hm.wgd_adapted_again.genes gene_names_with_suffix.txt > NO_du
 14911 NO_dups_here.txt
 to get 68996 which proves the workings out.
 
-########## other code workings out
+########## other code workings out to create a formated file that can be compared fairly
 
 awk '{print $1}' Hm.wgd.genes > Hm.wgd_adapted.genes
 
