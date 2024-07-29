@@ -54,4 +54,19 @@ sed 's/$/.1/' Hm.wgd_adapted.genes > Hm.wgd_adapted_again.genes
 sed 's/^ptg/_&/' duplicate_column_extracted_modified > duplicate_column_extracted_final
 
 
+######## create no duplicate proteome for orthovenn 
+
+#### so this code is for matches and no duplicates
+
+awk 'BEGIN { while ((getline line < "NO_dups_here.txt") > 0) exclusion[line]=1 } 
+     /^>/ {header=$0; getline seq; if (header in exclusion) {print header; print seq} }' unwrapped_H.m_proteome.fasta > Matched_unwrapped_orthovenn_h.m_proteome.fasta
+
+
+###### this code is for non-matches and duplicates
+
+awk 'BEGIN { while ((getline line < "NO_dups_here.txt") > 0) exclusion[line]=1 } 
+     /^>/ {header=$0; getline seq; if (!(header in exclusion)) {print header; print seq} }' unwrapped_H.m_proteome.fasta > No_matches_unwrapped_orthovenn_h.m_proteome.fasta
+
+
+
 
