@@ -1,0 +1,22 @@
+##### Dupgen_finder pipeline
+
+##### Step 1) Modify the current fasta file to put the Si prefix infront of the current gene name _ptg*
+
+sed 's/^>_ptg/>Si_ptg/' S.imbe_Proteome.fasta > S.imbe_Proteome_DupGeneFinder.fasta
+
+##### Step 2) Now we want to unwrapp the prtoem for the commands later 
+
+awk '/^>/ { if (seq) print seq; print; seq="" } /^[^>]/ { seq = seq $0 } END { if (seq) print seq }' S.imbe_Proteome_DupGeneFinder.fasta > S.imbe_Proteome_DupGeneFinder_unwrapped.fasta
+
+##### Step 3) Create a reference database based on the species you want to find duplication in (use the prefix modified fasta file from step 1) run on the command line
+
+makeblastdb -in S.imbe_Proteome_DupGeneFinder.fasta -dbtype prot -title Si -parse_seqids -out Si
+
+##### Step 4) Align protein query sequences against the reference database 
+
+blastp -query S.imbe_Proteome_DupGeneFinder.fasta -db Si -evalue 1e-10 -max_target_seqs 5 -outfmt 6 -out Si.blast
+
+##### Step 5) create the hyrid file with the outgroup and the main species by using the same databse from the first species but use the outgroup to blast 
+# against the database
+
+blastp -query S.wilk_Proteome_DupGeneFinder.fasta -db Si -evalue 1e-10 -max_target_seqs 5 -outfmt 6 -out Si_Sw.blast
