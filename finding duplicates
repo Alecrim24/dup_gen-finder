@@ -68,5 +68,7 @@ awk 'BEGIN { while ((getline line < "NO_dups_here.txt") > 0) exclusion[line]=1 }
      /^>/ {header=$0; getline seq; if (!(header in exclusion)) {print header; print seq} }' unwrapped_H.m_proteome.fasta > No_matches_unwrapped_orthovenn_h.m_proteome.fasta
 
 
+####### unwrap the files
+awk '/^>/ {if (seqlen) {print seq}; print; seq=""; next} {seq = seq $0} END {print seq}' H.m_proteome-DupGeneFinder.fasta > H.m_proteome-DupGeneFinder_unwrapped.fasta
 
 
